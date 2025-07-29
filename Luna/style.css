@@ -1,0 +1,93 @@
+:root {
+  /* Color variables */
+  --main-bg: #fff;
+}
+
+html, body {
+  /* base styles */
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background: #000;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  /* Hide scrollbars */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}
+
+#main-container {
+  /* Main container styles */
+  width: 100vw;
+  min-height: 100vh;
+  display: block;
+  padding: 0;
+}
+
+.session {
+  /* Session section styles */
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+.session img, .session video {
+  /* Media fill styles */
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+}
+
+.session.last-session {
+  /* Last session special layout */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  position: static;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+.session.last-session img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.session.bg-session {
+  /* Background session layout */
+  height: auto !important;
+  min-height: 100vh !important;
+  position: relative;
+  overflow: visible;
+}
+.session.bg-session img {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100vw;
+  height: 100%;
+  object-fit: fill;
+  z-index: 1;
+} 
