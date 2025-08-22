@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Session data for main content
 const sessions = [
-  ["photo/Luna MV(5).mp4"],
+  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4"],
   ["photo/jessica007_A_fierce_Korean_idol_girl_with_pastel_blue-to-purple_ae648413-9507-4b32-927c-bb515ff5f8c9.png"],
   ["photo/Untitled design (6).png"],
   ["photo/Luna_website collage.mp4"],
@@ -216,7 +216,7 @@ sessions.forEach((items, idx) => {
     const socials = [
       { href: 'https://x.com/luna_virtuals', img: 'photo/twitter.png', alt: 'X', size: 33 },
       { href: 'https://www.tiktok.com/@lunabyvirtuals', img: 'photo/tik-tok.png', alt: 'TikTok', size: 32 },
-      { href: 'https://www.youtube.com/@aidol_official', img: 'photo/youtube.png', alt: 'YouTube', size: 32 },
+      { href: 'https://www.youtube.com/@lunabyvirtuals', img: 'photo/youtube.png', alt: 'YouTube', size: 32 },
       { href: 'https://www.instagram.com/lunabyvirtuals?igsh=eW93M29qZmtrc3J2', img: 'photo/instagram.png', alt: 'Instagram', size: 33 },
     ];
     const stack = document.createElement('div');
@@ -315,7 +315,7 @@ sessions.forEach((items, idx) => {
     video.controls = false;
     sessionDiv.appendChild(video);
 
-    if (src === 'photo/Luna MV(5).mp4') {
+    if (src === 'https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4') {
       lunaVideo = video;
       video.autoplay = false;
       video.muted = true;
@@ -1086,7 +1086,7 @@ sessions.forEach((items, idx) => {
 
     const socials = [
       { href: 'https://x.com/luna_virtuals', img: 'photo/twitter.png', alt: 'X' },
-      { href: 'https://www.youtube.com/@aidol_official', img: 'photo/youtube.png', alt: 'YouTube' },
+      { href: 'https://www.youtube.com/@lunabyvirtuals', img: 'photo/youtube.png', alt: 'YouTube' },
       { href: 'https://www.instagram.com/lunabyvirtuals', img: 'photo/instagram.png', alt: 'Instagram' },
       { href: 'https://www.tiktok.com/@lunabyvirtuals', img: 'photo/tik-tok.png', alt: 'TikTok' },
     ];
