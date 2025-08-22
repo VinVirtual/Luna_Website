@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Session data for main content
 const sessions = [
-  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/RUSH_Final_MV.mp4"],
+  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4", "https://film-luna.s3.ap-southeast-1.amazonaws.com/RUSH_Final_MV.mp4"],
   ["photo/jessica007_A_fierce_Korean_idol_girl_with_pastel_blue-to-purple_ae648413-9507-4b32-927c-bb515ff5f8c9.png"],
   ["photo/Untitled design (6).png"],
   ["photo/Luna_website collage.mp4"],
@@ -299,28 +299,38 @@ sessions.forEach((items, idx) => {
     sessionDiv.style.overflow = 'hidden';
     sessionDiv.style.display = 'block';
     sessionDiv.style.background = '#000';
-    const video = document.createElement('video');
-    video.src = src;
-    video.loop = true;
-    video.playsInline = true;
-    video.style.position = 'absolute';
-    video.style.left = '0';
-    video.style.top = '0';
-    video.style.width = '100vw';
-    video.style.height = '100vh';
-    video.style.objectFit = 'fill';
-    video.style.display = 'block';
-    video.style.zIndex = '1';
-    video.style.background = '#000';
-    video.controls = false;
-    sessionDiv.appendChild(video);
-
-    if (src === 'https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4') {
-      lunaVideo = video;
-      video.autoplay = false;
-      video.muted = true;
-      video.pause();
-      // Add logo to Luna MV video
+    
+    // Handle multiple videos in the same session
+    if (Array.isArray(items) && items.length > 1 && items.every(item => item.endsWith('.mp4'))) {
+      // Create multiple videos for this session
+      items.forEach((videoSrc, videoIndex) => {
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.loop = true;
+        video.playsInline = true;
+        video.style.position = 'absolute';
+        video.style.left = '0';
+        video.style.top = '0';
+        video.style.width = '100vw';
+        video.style.height = '100vh';
+        video.style.objectFit = 'fill';
+        video.style.display = 'block';
+        video.style.zIndex = videoIndex + 1; // Stack videos with different z-index
+        video.style.background = '#000';
+        video.controls = false;
+        video.muted = true;
+        video.autoplay = true;
+        sessionDiv.appendChild(video);
+        
+        // Set the first video as lunaVideo for interaction handling
+        if (videoIndex === 0) {
+          lunaVideo = video;
+          video.autoplay = false;
+          video.pause();
+        }
+      });
+      
+      // Add logo to multiple video session
       const logo = document.createElement('img');
       logo.src = 'photo/Luna_White.png';
       logo.alt = 'Luna Logo';
@@ -330,10 +340,10 @@ sessions.forEach((items, idx) => {
       logo.style.width = '183px';
       logo.style.height = '122px';
       logo.style.zIndex = '100';
-      sessionDiv.style.position = 'relative';
       sessionDiv.appendChild(logo);
-      // Responsive logo position for Luna MV
-      function updateLunaMVLogoPosition() {
+      
+      // Responsive logo position for multiple videos
+      function updateMultipleVideoLogoPosition() {
         if (window.innerWidth >= 1200) {
           logo.style.left = '61px';
           logo.style.top = '49px';
@@ -351,48 +361,107 @@ sessions.forEach((items, idx) => {
           logo.style.height = '56px';
         }
       }
-      updateLunaMVLogoPosition();
-      window.addEventListener('resize', updateLunaMVLogoPosition);
+      updateMultipleVideoLogoPosition();
+      window.addEventListener('resize', updateMultipleVideoLogoPosition);
+      
     } else {
-      video.autoplay = true;
-      video.muted = true;
-    }
-    // Add mute/unmute button for video (except collage)
-    if (src !== 'photo/Luna_website collage.mp4') {
-      const muteBtn = document.createElement('button');
-      muteBtn.style.position = 'absolute';
-      muteBtn.style.right = '32px';
-      muteBtn.style.bottom = '32px';
-      muteBtn.style.zIndex = '10';
-      muteBtn.style.background = 'rgba(0,0,0,0.5)';
-      muteBtn.style.border = 'none';
-      muteBtn.style.borderRadius = '50%';
-      muteBtn.style.width = '48px';
-      muteBtn.style.height = '48px';
-      muteBtn.style.cursor = 'pointer';
-      muteBtn.style.display = 'flex';
-      muteBtn.style.alignItems = 'center';
-      muteBtn.style.justifyContent = 'center';
-      const iconImg = document.createElement('img');
-      iconImg.src = video.muted ? 'photo/sound-off.png' : 'photo/speaker-filled-audio-tool.png';
-      iconImg.alt = video.muted ? 'Mute' : 'Unmute';
-      iconImg.style.width = '32px';
-      iconImg.style.height = '32px';
-      iconImg.style.objectFit = 'contain';
-      iconImg.style.filter = 'invert(1) brightness(2)';
-      muteBtn.appendChild(iconImg);
-      muteBtn.onclick = function() {
-        video.muted = !video.muted;
-        if (video.muted) {
-          iconImg.src = 'photo/sound-off.png';
-          iconImg.alt = 'Mute';
-        } else {
-          iconImg.src = 'photo/speaker-filled-audio-tool.png';
-          iconImg.alt = 'Unmute';
+      // Single video handling (existing logic)
+      const video = document.createElement('video');
+      video.src = src;
+      video.loop = true;
+      video.playsInline = true;
+      video.style.position = 'absolute';
+      video.style.left = '0';
+      video.style.top = '0';
+      video.style.width = '100vw';
+      video.style.height = '100vh';
+      video.style.objectFit = 'fill';
+      video.style.display = 'block';
+      video.style.zIndex = '1';
+      video.style.background = '#000';
+      video.controls = false;
+      sessionDiv.appendChild(video);
+
+      if (src === 'https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4') {
+        lunaVideo = video;
+        video.autoplay = false;
+        video.muted = true;
+        video.pause();
+        // Add logo to Luna MV video
+        const logo = document.createElement('img');
+        logo.src = 'photo/Luna_White.png';
+        logo.alt = 'Luna Logo';
+        logo.style.position = 'absolute';
+        logo.style.left = '21px';
+        logo.style.top = '19px';
+        logo.style.width = '183px';
+        logo.style.height = '122px';
+        logo.style.zIndex = '100';
+        sessionDiv.style.position = 'relative';
+        sessionDiv.appendChild(logo);
+        // Responsive logo position for Luna MV
+        function updateLunaMVLogoPosition() {
+          if (window.innerWidth >= 1200) {
+            logo.style.left = '61px';
+            logo.style.top = '49px';
+            logo.style.width = '183px';
+            logo.style.height = '122px';
+          } else if (window.innerWidth >= 810 && window.innerWidth < 1200) {
+            logo.style.left = '41px';
+            logo.style.top = '39px';
+            logo.style.width = '183px';
+            logo.style.height = '122px';
+          } else {
+            logo.style.left = '18px';
+            logo.style.top = '12px';
+            logo.style.width = '72px';
+            logo.style.height = '56px';
+          }
         }
-      };
-      sessionDiv.style.position = 'relative';
-      sessionDiv.appendChild(muteBtn);
+        updateLunaMVLogoPosition();
+        window.addEventListener('resize', updateLunaMVLogoPosition);
+      } else {
+        video.autoplay = true;
+        video.muted = true;
+      }
+      
+      // Add mute/unmute button for video (except collage)
+      if (src !== 'photo/Luna_website collage.mp4') {
+        const muteBtn = document.createElement('button');
+        muteBtn.style.position = 'absolute';
+        muteBtn.style.right = '32px';
+        muteBtn.style.bottom = '32px';
+        muteBtn.style.zIndex = '10';
+        muteBtn.style.background = 'rgba(0,0,0,0.5)';
+        muteBtn.style.border = 'none';
+        muteBtn.style.borderRadius = '50%';
+        muteBtn.style.width = '48px';
+        muteBtn.style.height = '48px';
+        muteBtn.style.cursor = 'pointer';
+        muteBtn.style.display = 'flex';
+        muteBtn.style.alignItems = 'center';
+        muteBtn.style.justifyContent = 'center';
+        const iconImg = document.createElement('img');
+        iconImg.src = video.muted ? 'photo/sound-off.png' : 'photo/speaker-filled-audio-tool.png';
+        iconImg.alt = video.muted ? 'Mute' : 'Unmute';
+        iconImg.style.width = '32px';
+        iconImg.style.height = '32px';
+        iconImg.style.objectFit = 'contain';
+        iconImg.style.filter = 'invert(1) brightness(2)';
+        muteBtn.appendChild(iconImg);
+        muteBtn.onclick = function() {
+          video.muted = !video.muted;
+          if (video.muted) {
+            iconImg.src = 'photo/sound-off.png';
+            iconImg.alt = 'Mute';
+          } else {
+            iconImg.src = 'photo/speaker-filled-audio-tool.png';
+            iconImg.alt = 'Unmute';
+          }
+        };
+        sessionDiv.style.position = 'relative';
+        sessionDiv.appendChild(muteBtn);
+      }
     }
   } else if (src === 'photo/backG.png') {
     // Render contact and footer section for backG.png session
