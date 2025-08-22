@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Session data for main content
 const sessions = [
-  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4"],
+  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/RUSH_Final_MV.mp4"],
   ["photo/jessica007_A_fierce_Korean_idol_girl_with_pastel_blue-to-purple_ae648413-9507-4b32-927c-bb515ff5f8c9.png"],
   ["photo/Untitled design (6).png"],
   ["photo/Luna_website collage.mp4"],
