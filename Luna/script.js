@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Session data for main content
 const sessions = [
-  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4", "https://film-luna.s3.ap-southeast-1.amazonaws.com/RUSH_Final_MV.mp4"],
+  ["https://film-luna.s3.ap-southeast-1.amazonaws.com/RUSH_Final_MV.mp4", "https://film-luna.s3.ap-southeast-1.amazonaws.com/Luna+MV(5).mp4"],
   ["photo/jessica007_A_fierce_Korean_idol_girl_with_pastel_blue-to-purple_ae648413-9507-4b32-927c-bb515ff5f8c9.png"],
   ["photo/Untitled design (6).png"],
   ["photo/Luna_website collage.mp4"],
@@ -302,6 +302,9 @@ sessions.forEach((items, idx) => {
     
     // Handle multiple videos in the same session
     if (Array.isArray(items) && items.length > 1 && items.every(item => item.endsWith('.mp4'))) {
+      let currentVideoIndex = 0;
+      const videos = [];
+      
       // Create multiple videos for this session
       items.forEach((videoSrc, videoIndex) => {
         const video = document.createElement('video');
@@ -314,21 +317,69 @@ sessions.forEach((items, idx) => {
         video.style.width = '100vw';
         video.style.height = '100vh';
         video.style.objectFit = 'fill';
-        video.style.display = 'block';
-        video.style.zIndex = videoIndex + 1; // Stack videos with different z-index
+        video.style.display = videoIndex === 0 ? 'block' : 'none'; // Only show first video initially
+        video.style.zIndex = '1';
         video.style.background = '#000';
         video.controls = false;
         video.muted = true;
-        video.autoplay = true;
+        video.autoplay = false;
+        video.pause();
         sessionDiv.appendChild(video);
+        videos.push(video);
         
         // Set the first video as lunaVideo for interaction handling
         if (videoIndex === 0) {
           lunaVideo = video;
-          video.autoplay = false;
-          video.pause();
         }
       });
+      
+      // Function to switch videos
+      function switchVideo(index) {
+        videos.forEach((video, i) => {
+          if (i === index) {
+            video.style.display = 'block';
+            video.play();
+          } else {
+            video.style.display = 'none';
+            video.pause();
+          }
+        });
+        currentVideoIndex = index;
+        updateDots();
+      }
+      
+      // Create navigation dots
+      const dotsContainer = document.createElement('div');
+      dotsContainer.style.position = 'absolute';
+      dotsContainer.style.bottom = '32px';
+      dotsContainer.style.left = '50%';
+      dotsContainer.style.transform = 'translateX(-50%)';
+      dotsContainer.style.display = 'flex';
+      dotsContainer.style.gap = '12px';
+      dotsContainer.style.zIndex = '10';
+      
+      const dots = [];
+      items.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.style.width = '12px';
+        dot.style.height = '12px';
+        dot.style.borderRadius = '50%';
+        dot.style.border = 'none';
+        dot.style.cursor = 'pointer';
+        dot.style.transition = 'all 0.3s ease';
+        dot.style.background = index === 0 ? '#fff' : 'rgba(255, 255, 255, 0.3)';
+        dot.onclick = () => switchVideo(index);
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+      });
+      
+      function updateDots() {
+        dots.forEach((dot, index) => {
+          dot.style.background = index === currentVideoIndex ? '#fff' : 'rgba(255, 255, 255, 0.3)';
+        });
+      }
+      
+      sessionDiv.appendChild(dotsContainer);
       
       // Add logo to multiple video session
       const logo = document.createElement('img');
@@ -363,6 +414,48 @@ sessions.forEach((items, idx) => {
       }
       updateMultipleVideoLogoPosition();
       window.addEventListener('resize', updateMultipleVideoLogoPosition);
+      
+      // Add mute/unmute button for multiple videos
+      const muteBtn = document.createElement('button');
+      muteBtn.style.position = 'absolute';
+      muteBtn.style.right = '32px';
+      muteBtn.style.bottom = '32px';
+      muteBtn.style.zIndex = '10';
+      muteBtn.style.background = 'rgba(0,0,0,0.5)';
+      muteBtn.style.border = 'none';
+      muteBtn.style.borderRadius = '50%';
+      muteBtn.style.width = '48px';
+      muteBtn.style.height = '48px';
+      muteBtn.style.cursor = 'pointer';
+      muteBtn.style.display = 'flex';
+      muteBtn.style.alignItems = 'center';
+      muteBtn.style.justifyContent = 'center';
+      
+      const iconImg = document.createElement('img');
+      iconImg.src = 'photo/sound-off.png';
+      iconImg.alt = 'Mute';
+      iconImg.style.width = '32px';
+      iconImg.style.height = '32px';
+      iconImg.style.objectFit = 'contain';
+      iconImg.style.filter = 'invert(1) brightness(2)';
+      muteBtn.appendChild(iconImg);
+      
+      muteBtn.onclick = function() {
+        const isMuted = videos[currentVideoIndex].muted;
+        videos.forEach(video => {
+          video.muted = !isMuted;
+        });
+        
+        if (videos[currentVideoIndex].muted) {
+          iconImg.src = 'photo/sound-off.png';
+          iconImg.alt = 'Mute';
+        } else {
+          iconImg.src = 'photo/speaker-filled-audio-tool.png';
+          iconImg.alt = 'Unmute';
+        }
+      };
+      
+      sessionDiv.appendChild(muteBtn);
       
     } else {
       // Single video handling (existing logic)
